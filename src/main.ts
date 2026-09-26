@@ -1,5 +1,5 @@
 import './style.css';
-import { SITE } from './config';
+import { SITE, BRAND } from './config';
 
 interface Voc {
   id: string; community: string; date: string; type: string; category: string;
@@ -31,6 +31,18 @@ function applyText() {
   $('footerText').textContent = SITE.footer;
   $('privacy').textContent = SITE.privacy;
   $<HTMLInputElement>('search').placeholder = SITE.searchPlaceholder;
+}
+
+const brandSrc = (k: keyof typeof BRAND) => `${import.meta.env.BASE_URL}${BRAND[k]}`;
+let mascotOk = false;
+
+function loadBrand() {
+  document.querySelectorAll<HTMLImageElement>('img[data-brand]').forEach((img) => {
+    const k = img.dataset.brand as keyof typeof BRAND;
+    img.onload = () => { img.hidden = false; if (k === 'mascot') { mascotOk = true; if (D.length) render(); } };
+    img.onerror = () => img.remove();
+    img.src = brandSrc(k);
+  });
 }
 
 function summary(updated: string) {
@@ -98,7 +110,7 @@ function render() {
   $('resultCount').textContent = `${out.length}건`;
   $('results').innerHTML = visible.length
     ? visible.map(card).join('')
-    : `<div class="empty"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="11" cy="11" r="7.5"/><path d="m20 20-3.8-3.8"/></svg><h3>검색 결과가 없습니다</h3><p>검색어를 줄이거나 필터를 초기화해 주세요.</p><button type="button" class="primary-btn" data-action="reset">전체 VOC 보기</button></div>`;
+    : `<div class="empty">${mascotOk ? `<img class="mascot-empty" src="${brandSrc('mascot')}" alt="">` : '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="11" cy="11" r="7.5"/><path d="m20 20-3.8-3.8"/></svg>'}<h3>검색 결과가 없습니다</h3><p>검색어를 줄이거나 필터를 초기화해 주세요.</p><button type="button" class="primary-btn" data-action="reset">전체 VOC 보기</button></div>`;
   $('moreWrap').style.display = left > 0 ? 'flex' : 'none';
   $('more').textContent = left > 0 ? `${Math.min(SITE.pageSize, left)}건 더 보기 · ${left}건 남음` : '';
 
@@ -148,6 +160,7 @@ function bind() {
 async function init() {
   applyText();
   bind();
+  loadBrand();
   try {
     const res = await fetch(`${import.meta.env.BASE_URL}data/voc.json`, { cache: 'no-cache' });
     if (!res.ok) throw new Error(String(res.status));

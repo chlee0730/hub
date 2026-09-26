@@ -48,3 +48,8 @@ scripts/xlsx2json.mjs    빌드 시 엑셀 → public/data/voc.json
 src/                     화면 (Vite + TypeScript)
 .github/workflows/       push 시 GitHub Pages 자동 배포
 ```
+
+## 브랜드 (한국공학대학교 UI)
+
+- 전용 색상: TU BLUE `#1758A8` · TU SKY BLUE `#068FD3` · TU MINT `#01B3CD` (`src/style.css` `:root`)
+- 시그니처 · 심벌 · 티노 이미지: `public/brand/`에 넣으면 자동 표시 (파일명은 `public/brand/README.md` 참고)

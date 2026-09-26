@@ -1,5 +1,5 @@
 /* 디자인 토큰은 :root 에서 조정 */
-:root{--navy:#123b64;--navy-2:#0b2b49;--blue:#1769aa;--blue-soft:#eaf3fb;--ink:#16283b;--sub:#536579;--muted:#778596;--line:#d7e0e9;--line-soft:#e8edf2;--surface:#fff;--bg:#f3f6f9;--green:#187451;--green-bg:#e7f4ee;--amber:#8b5b12;--amber-bg:#fff2d8;--violet:#684a91;--violet-bg:#f0ebf7;--gray-bg:#edf1f4;--focus:#2b7bbb;--radius:10px;--shadow:0 1px 2px rgba(21,45,70,.06),0 6px 18px rgba(21,45,70,.04)}
+:root{--tu-blue:#1758A8;--tu-sky:#068FD3;--tu-mint:#01B3CD;--navy:#1758A8;--navy-2:#0e3d78;--blue:#1668b8;--blue-soft:#e8f3fb;--ink:#16283b;--sub:#536579;--muted:#778596;--line:#d7e0e9;--line-soft:#e8edf2;--surface:#fff;--bg:#f3f6f9;--green:#00707f;--green-bg:#e0f6f9;--amber:#8b5b12;--amber-bg:#fff2d8;--violet:#684a91;--violet-bg:#f0ebf7;--gray-bg:#edf1f4;--focus:#068FD3;--radius:10px;--shadow:0 1px 2px rgba(21,45,70,.06),0 6px 18px rgba(21,45,70,.04)}
 
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -11,7 +11,7 @@ button{color:inherit}
 .skip:focus{top:16px}
 
 .site-header{background:var(--surface);border-bottom:1px solid var(--line)}
-.header-accent{height:5px;background:linear-gradient(90deg,var(--navy) 0 62%,#2e8ac4 62%)}
+.header-accent{height:5px;background:linear-gradient(90deg,var(--tu-blue) 0 50%,var(--tu-sky) 50% 80%,var(--tu-mint) 80%)}
 .utility{padding:13px 0 11px;border-bottom:1px solid var(--line-soft);color:var(--sub);font-size:.78rem;font-weight:650}
 .title-row{display:flex;align-items:flex-end;justify-content:space-between;gap:32px;padding:25px 0 28px}
 .title-group{min-width:0}
@@ -22,31 +22,31 @@ button{color:inherit}
 .doc-meta dt{color:var(--muted)}
 .doc-meta dd{margin:0;color:var(--ink);font-weight:700}
 
-.summary-wrap{background:var(--navy);color:#fff}
+.summary-wrap{position:relative;overflow:hidden;background:linear-gradient(115deg,var(--navy-2) 0%,var(--tu-blue) 58%,#1673c2 100%);color:#fff}
 .summary{display:grid;grid-template-columns:1fr 1fr 1fr minmax(280px,1.55fr);align-items:stretch}
 .metric{padding:19px 24px;border-right:1px solid rgba(255,255,255,.15)}
 .metric:first-child{padding-left:0}
-.metric-label{display:block;color:#bbd1e4;font-size:.78rem;font-weight:650}
+.metric-label{display:block;color:#cfe3f5;font-size:.78rem;font-weight:650}
 .metric strong{display:block;margin-top:1px;font-size:1.55rem;line-height:1.25;letter-spacing:-.03em}
-.metric strong small{font-size:.77rem;font-weight:650;color:#c6d8e8}
+.metric strong small{font-size:.77rem;font-weight:650;color:#d6e8f7}
 .progress-area{padding:19px 0 18px 26px}
-.progress-head{display:flex;justify-content:space-between;gap:12px;color:#d1dfeb;font-size:.78rem}
+.progress-head{display:flex;justify-content:space-between;gap:12px;color:#dcebf7;font-size:.78rem}
 .progress-head strong{color:#fff;font-size:.9rem}
-.progress-track{display:flex;height:7px;margin-top:10px;overflow:hidden;border-radius:2px;background:#355777}
+.progress-track{display:flex;height:7px;margin-top:10px;overflow:hidden;border-radius:2px;background:rgba(255,255,255,.2)}
 .progress-track i{display:block;height:100%}
-.progress-complete{background:#55bf8f}
+.progress-complete{background:var(--tu-mint)}
 .progress-active{background:#efb956}
 .progress-long{background:#9b81c6}
-.progress-note{display:flex;gap:14px;margin-top:8px;color:#bcd0e1;font-size:.7rem}
+.progress-note{display:flex;gap:14px;margin-top:8px;color:#cfe2f3;font-size:.7rem}
 .progress-note span:before{content:"";display:inline-block;width:6px;height:6px;margin-right:5px;border-radius:50%;vertical-align:1px}
-.progress-note .c:before{background:#55bf8f}
+.progress-note .c:before{background:var(--tu-mint)}
 .progress-note .a:before{background:#efb956}
 .progress-note .l:before{background:#9b81c6}
 
 .main{padding:30px 0 64px}
 .searchbar{position:sticky;top:0;z-index:20;display:grid;grid-template-columns:1fr auto;gap:10px;padding:13px 0;background:rgba(243,246,249,.96);backdrop-filter:blur(8px)}
 .search-box{height:54px;display:flex;align-items:center;gap:11px;padding:0 16px;background:#fff;border:1px solid #bfcbd7;border-radius:8px;box-shadow:0 1px 2px rgba(20,47,72,.04)}
-.search-box:focus-within{border-color:var(--focus);box-shadow:0 0 0 3px rgba(43,123,187,.14)}
+.search-box:focus-within{border-color:var(--focus);box-shadow:0 0 0 3px rgba(6,143,211,.14)}
 .search-box svg{flex:none;color:#607388}
 .search-box input{width:100%;min-width:0;border:0;outline:0;background:transparent;color:var(--ink);font-size:1rem}
 .search-box input::placeholder{color:#8a97a6}
@@ -65,15 +65,15 @@ button{color:inherit}
 .status-list{display:grid;gap:4px}
 .status-btn{width:100%;min-height:39px;display:flex;align-items:center;justify-content:space-between;padding:8px 9px;border:1px solid transparent;border-radius:6px;background:transparent;color:#43576c;font-size:.84rem;font-weight:650;text-align:left;cursor:pointer}
 .status-btn:hover{background:#f4f7fa}
-.status-btn.on{border-color:#c4d8e9;background:#edf5fb;color:var(--navy)}
+.status-btn.on{border-color:#b9d9ef;background:var(--blue-soft);color:var(--navy)}
 .status-name{display:flex;align-items:center;gap:8px}
 .status-name:before{content:"";width:7px;height:7px;border-radius:50%;background:#93a0ad}
-.status-btn[data-status="완료"] .status-name:before{background:#2b946c}
+.status-btn[data-status="완료"] .status-name:before{background:var(--tu-mint)}
 .status-btn[data-status="진행중"] .status-name:before{background:#d49225}
 .status-btn[data-status="장기검토"] .status-name:before{background:#8467ad}
 .status-count{min-width:25px;color:#718195;font-size:.76rem;text-align:right}
 .filter-select{width:100%;height:44px;padding:0 34px 0 10px;border:1px solid #cbd5df;border-radius:6px;outline:0;appearance:none;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23536579' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 10px center;color:#2c4054;font-size:.83rem}
-.filter-select:focus{border-color:var(--focus);box-shadow:0 0 0 3px rgba(43,123,187,.12)}
+.filter-select:focus{border-color:var(--focus);box-shadow:0 0 0 3px rgba(6,143,211,.12)}
 .filter-stack{display:grid;gap:10px}
 .privacy{margin:2px 0 0;padding-top:14px;border-top:1px solid var(--line-soft);color:#778596;font-size:.7rem;line-height:1.55}
 
@@ -128,7 +128,7 @@ details[open] .chev{transform:rotate(180deg)}
 .footer-row{min-height:88px;display:flex;align-items:center;justify-content:space-between;gap:16px;color:#667689;font-size:.75rem}
 .footer-row p{margin:0}
 
-button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible,a:focus-visible{outline:3px solid rgba(43,123,187,.3);outline-offset:2px}
+button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible,a:focus-visible{outline:3px solid rgba(6,143,211,.3);outline-offset:2px}
 
 .filter-actions{display:flex;align-items:center;gap:12px}
 .close-filter{display:none;width:34px;height:34px;padding:0;border:1px solid #cbd5df;border-radius:6px;background:#fff;color:#40566b;font-size:1.35rem;line-height:1;cursor:pointer}
@@ -226,3 +226,20 @@ summary{display:none}
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
 .filter-label.sub{margin-bottom:5px}
 .search-box{position:relative}
+
+/* ── TU Korea 브랜드 요소 ── */
+.utility .container{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand-sig{display:block;height:30px;width:auto}
+.utility-text{color:var(--sub)}
+.title-row{position:relative}
+.title-aside{display:flex;align-items:flex-end;gap:22px}
+.mascot{display:block;width:auto;height:112px;margin-bottom:-28px;filter:drop-shadow(0 6px 10px rgba(23,88,168,.15))}
+.summary-wrap .symbol-bg{position:absolute;right:-40px;top:50%;width:260px;height:auto;transform:translateY(-50%);opacity:.08;pointer-events:none;filter:brightness(0) invert(1)}
+.summary{position:relative;z-index:1}
+.eyebrow{color:var(--tu-sky)}
+.type{color:var(--tu-blue)}
+.answer-box{border-left-color:var(--tu-sky)}
+.empty .mascot-empty{display:block;width:96px;height:auto;margin:0 auto 6px}
+[hidden]{display:none!important}
+@media(max-width:900px){.mascot{height:92px;margin-bottom:-22px}}
+@media(max-width:680px){.brand-sig{height:24px}.utility-text{display:none}.title-aside{display:block}.mascot{position:absolute;right:0;top:14px;height:74px;margin:0}.title-group{padding-right:78px}.summary-wrap .symbol-bg{width:180px;right:-50px}}
