@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<meta name="description" content="특화대학 일학습병행 공동훈련센터 커뮤니티 VOC 검색 및 조치 현황">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:title" content="특화대학 공동훈련센터 커뮤니티 VOC 관리일지">
+<meta property="og:description" content="커뮤니티에서 접수된 현장 질의·건의와 공단 답변, 후속조치 현황을 확인하세요.">
+<meta property="og:url" content="https://chlee0730.github.io/hub/">
+<meta property="og:image" content="https://chlee0730.github.io/hub/preview.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://chlee0730.github.io/hub/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23123b64'/%3E%3Cpath d='M9 11h14M9 16h14M9 21h9' stroke='white' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E">
+<title>특화대학 공동훈련센터 커뮤니티 VOC 관리일지</title>
+</head>
+<body>
+<a class="skip" href="#content">본문 바로가기</a>
+<header class="site-header" id="top">
+  <div class="header-accent"></div>
+  <div class="utility"><div class="container" id="utilityText"></div></div>
+  <div class="container title-row">
+    <div class="title-group">
+      <p class="eyebrow" id="eyebrow"></p>
+      <h1 id="pageTitle"></h1>
+      <p class="description" id="pageDesc"></p>
+    </div>
+    <dl class="doc-meta"><dt>최신화</dt><dd id="updated">-</dd><dt>관리 기준</dt><dd>접수일 최신순</dd></dl>
+  </div>
+</header>
+
+<section class="summary-wrap" aria-label="VOC 처리 현황">
+  <div class="container summary">
+    <div class="metric"><span class="metric-label">누적 접수</span><strong id="totalMetric">-</strong></div>
+    <div class="metric"><span class="metric-label">조치 완료</span><strong id="completeMetric">-</strong></div>
+    <div class="metric"><span class="metric-label">검토·진행</span><strong id="activeMetric">-</strong></div>
+    <div class="progress-area">
+      <div class="progress-head"><span id="rateBase">-</span><strong id="completeRate">-</strong></div>
+      <div class="progress-track" id="progressTrack"></div>
+      <div class="progress-note" id="progressNote"></div>
+    </div>
+  </div>
+</section>
+
+<main class="container main" id="content">
+  <div class="searchbar">
+    <label class="search-box">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7.5"/><path d="m20 20-3.8-3.8"/></svg>
+      <span class="sr-only">VOC 검색</span>
+      <input id="search" type="search" autocomplete="off">
+    </label>
+    <button class="mobile-filter" id="mobileFilter" type="button" aria-expanded="false" aria-controls="filterPanel">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4"/></svg>상세 필터
+    </button>
+  </div>
+
+  <div class="workspace">
+    <aside class="filter-panel" id="filterPanel">
+      <div class="filter-head">
+        <h2>상세 필터</h2>
+        <div class="filter-actions">
+          <button class="reset-link" id="reset" type="button">전체 초기화</button>
+          <button class="close-filter" id="closeFilter" type="button" aria-label="상세 필터 닫기">×</button>
+        </div>
+      </div>
+      <div class="filter-group"><span class="filter-label">조치 상태</span><div class="status-list" id="statusList"></div></div>
+      <div class="filter-group">
+        <span class="filter-label">구분</span>
+        <div class="filter-stack">
+          <label><span class="filter-label sub">커뮤니티</span><select class="filter-select" id="community"></select></label>
+          <label><span class="filter-label sub">유형</span><select class="filter-select" id="type"></select></label>
+          <label><span class="filter-label sub">관련분류</span><select class="filter-select" id="category"></select></label>
+        </div>
+      </div>
+      <p class="privacy" id="privacy"></p>
+    </aside>
+    <button class="filter-backdrop" id="filterBackdrop" type="button" aria-label="상세 필터 닫기"></button>
+
+    <section class="content" aria-labelledby="resultTitle">
+      <div class="result-head"><h2 id="resultTitle">검색 결과 <strong id="resultCount">-</strong></h2><span class="sort-note">최신 접수순</span></div>
+      <p class="active-filter" id="activeFilter"></p>
+      <div class="cases" id="results" aria-live="polite"></div>
+      <div class="more-wrap" id="moreWrap"><button class="more" id="more" type="button"></button></div>
+    </section>
+  </div>
+</main>
+
+<button class="home-button" type="button" id="homeButton" aria-label="페이지 최상단으로 이동">
+  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 11 6-6 6 6"/><path d="M12 19V5"/></svg><span>홈</span>
+</button>
+<footer class="site-footer"><div class="container footer-row"><p id="footerText"></p><p>원문 기준 최신화일: <span id="footerUpdated">-</span></p></div></footer>
+
+<script type="module" src="/src/main.ts"></script>
+</body>
+</html>
