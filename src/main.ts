@@ -2,14 +2,13 @@ import './style.css';
 import { SITE, BRAND } from './config';
 
 interface Voc {
-  id: string; community: string; date: string; type: string; category: string;
+  id: string; community: string; meeting: string; date: string; type: string; category: string;
   question: string; reason: string; answer: string; status: string;
   action: string; actionDetail: string; note: string;
 }
 interface Data { updated: string; items: Voc[] }
 
 const ALL = '전체';
-const STATUS_ORDER = ['완료', '진행중', '장기검토', '미정'] as const;
 const STATUS_CLASS: Record<string, string> = { 완료: 'complete', 진행중: 'progress', 장기검토: 'long' };
 
 const $ = <T extends HTMLElement = HTMLElement>(id: string) => document.getElementById(id) as T;
@@ -19,7 +18,7 @@ const clean = (s: string | undefined) => { const t = (s ?? '').trim(); return t 
 const dateText = (d: string) => { if (!d) return '-'; const [y, m, dd] = d.split('-'); return `${+y}. ${m}. ${dd}.`; };
 const pct = (n: number, t: number) => (t ? (n / t) * 100 : 0);
 
-const state = { search: '', status: ALL, community: ALL, type: ALL, category: ALL, limit: SITE.pageSize };
+const state = { search: '', community: ALL, meeting: ALL, type: ALL, category: ALL, limit: SITE.pageSize };
 let D: Voc[] = [];
 let updatedAt = '';
 
@@ -77,18 +76,10 @@ function summary(items: Voc[], updated: string) {
   $('progressNote').innerHTML = `<span class="c">완료 ${done}</span><span class="a">진행중 ${act}</span><span class="l">장기검토 ${long}</span>`;
 }
 
-function fillSelect(id: 'community' | 'type' | 'category') {
-  const opts = [...new Set(D.map((x) => val(x[id])))].sort((a, b) => a.localeCompare(b, 'ko'));
+function fillSelect(id: 'community' | 'meeting' | 'type' | 'category') {
+  const values = D.map((x) => id === 'meeting' ? clean(x[id]) : val(x[id])).filter(Boolean);
+  const opts = [...new Set(values)].sort((a, b) => a.localeCompare(b, 'ko'));
   $(id).innerHTML = [ALL, ...opts].map((o) => `<option>${esc(o)}</option>`).join('');
-}
-
-function statusButtons() {
-  const items = communityItems();
-  const counts = statusCounts(items);
-  const labels = [ALL, ...STATUS_ORDER.filter((s) => (counts[s] ?? 0) > 0)];
-  $('statusList').innerHTML = labels
-    .map((s) => `<button type="button" class="status-btn${state.status === s ? ' on' : ''}" data-status="${s}" aria-pressed="${state.status === s}"><span class="status-name">${s}</span><span class="status-count">${s === ALL ? items.length : counts[s]}</span></button>`)
-    .join('');
 }
 
 const block = (title: string, text: string) => (text ? `<section class="block"><h4>${title}</h4><p>${esc(text)}</p></section>` : '');
@@ -98,7 +89,7 @@ function card(x: Voc) {
   const st = val(x.status);
   return `<article class="case">
   <div class="case-top">
-    <div class="meta"><span class="status ${STATUS_CLASS[st] ?? 'pending'}">${esc(st)}</span><span class="type">${esc(x.type)}</span><span class="meta-sep"></span><span>${esc(x.community)}</span><span>${dateText(x.date)}</span></div>
+    <div class="meta"><span class="status ${STATUS_CLASS[st] ?? 'pending'}">${esc(st)}</span><span class="type">${esc(x.type)}</span><span class="meta-sep"></span><span>${esc(x.community)}</span>${clean(x.meeting) ? `<span>${esc(clean(x.meeting))}</span>` : ''}<span>${dateText(x.date)}</span></div>
     <span class="case-id">${esc(x.id)}</span>
   </div>
   <div class="question-row"><h3 class="question">${esc(x.question)}</h3><span class="category">${esc(val(x.category, '분류 예정'))}</span></div>
@@ -115,8 +106,8 @@ function card(x: Voc) {
 function filtered() {
   const q = state.search.trim().toLocaleLowerCase('ko');
   return D.filter((x) =>
-    (state.status === ALL || val(x.status) === state.status) &&
     (state.community === ALL || val(x.community) === state.community) &&
+    (state.meeting === ALL || clean(x.meeting) === state.meeting) &&
     (state.type === ALL || val(x.type) === state.type) &&
     (state.category === ALL || val(x.category) === state.category) &&
     (!q || Object.values(x).join(' ').toLocaleLowerCase('ko').includes(q)));
@@ -124,8 +115,6 @@ function filtered() {
 
 function render() {
   const scopedItems = communityItems();
-  const availableStatuses = statusCounts(scopedItems);
-  if (state.status !== ALL && !(state.status in availableStatuses)) state.status = ALL;
   summary(scopedItems, updatedAt);
   const out = filtered(), visible = out.slice(0, state.limit), left = out.length - visible.length;
   $('resultCount').textContent = `${out.length}건`;
@@ -135,18 +124,17 @@ function render() {
   $('moreWrap').style.display = left > 0 ? 'flex' : 'none';
   $('more').textContent = left > 0 ? `${Math.min(SITE.pageSize, left)}건 더 보기 · ${left}건 남음` : '';
 
-  const parts = [state.status !== ALL && `상태: ${state.status}`, state.community, state.type, state.category].filter((p) => p && p !== ALL);
+  const parts = [state.community, state.meeting, state.type, state.category].filter((p) => p && p !== ALL);
   const af = $('activeFilter');
   af.textContent = parts.length ? `적용 중 · ${parts.join(' / ')}` : '';
   af.classList.toggle('show', parts.length > 0);
   $<HTMLButtonElement>('reset').disabled = !(state.search || parts.length);
-  statusButtons();
 }
 
 function reset() {
-  Object.assign(state, { search: '', status: ALL, community: ALL, type: ALL, category: ALL, limit: SITE.pageSize });
+  Object.assign(state, { search: '', community: ALL, meeting: ALL, type: ALL, category: ALL, limit: SITE.pageSize });
   $<HTMLInputElement>('search').value = '';
-  (['community', 'type', 'category'] as const).forEach((id) => ($<HTMLSelectElement>(id).value = ALL));
+  (['community', 'meeting', 'type', 'category'] as const).forEach((id) => ($<HTMLSelectElement>(id).value = ALL));
   render();
 }
 
@@ -161,12 +149,8 @@ function setFilterOpen(open: boolean, restoreFocus = false) {
 
 function bind() {
   $<HTMLInputElement>('search').addEventListener('input', (e) => { state.search = (e.target as HTMLInputElement).value; state.limit = SITE.pageSize; render(); });
-  (['community', 'type', 'category'] as const).forEach((id) =>
+  (['community', 'meeting', 'type', 'category'] as const).forEach((id) =>
     $(id).addEventListener('change', (e) => { state[id] = (e.target as HTMLSelectElement).value; state.limit = SITE.pageSize; render(); }));
-  $('statusList').addEventListener('click', (e) => {
-    const b = (e.target as HTMLElement).closest<HTMLButtonElement>('.status-btn');
-    if (b) { state.status = b.dataset.status!; state.limit = SITE.pageSize; render(); }
-  });
   $('results').addEventListener('click', (e) => { if ((e.target as HTMLElement).closest('[data-action="reset"]')) reset(); });
   $('reset').addEventListener('click', reset);
   $('more').addEventListener('click', () => { state.limit += SITE.pageSize; render(); });
@@ -188,7 +172,7 @@ async function init() {
     const data: Data = await res.json();
     D = data.items;
     updatedAt = data.updated;
-    (['community', 'type', 'category'] as const).forEach(fillSelect);
+    (['community', 'meeting', 'type', 'category'] as const).forEach(fillSelect);
     render();
   } catch (err) {
     $('results').innerHTML = `<div class="empty"><h3>데이터를 불러오지 못했습니다</h3><p>잠시 후 다시 시도해 주세요. (${esc(err)})</p></div>`;

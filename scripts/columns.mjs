@@ -2,6 +2,7 @@
 export const COLUMNS = [
   { key: 'id',           header: '번호',            width: 12 },
   { key: 'community',    header: '커뮤니티',        width: 14 },
+  { key: 'meeting',      header: '간담회',          width: 14 },
   { key: 'date',         header: '접수일',          width: 12 },
   { key: 'type',         header: '유형',            width: 8  },
   { key: 'category',     header: '관련분류',        width: 24 },

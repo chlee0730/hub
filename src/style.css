@@ -62,16 +62,6 @@ button{color:inherit}
 .filter-group{padding:16px 0;border-top:1px solid var(--line-soft)}
 .filter-group:first-of-type{padding-top:0;border-top:0}
 .filter-label{display:block;margin-bottom:9px;color:#536579;font-size:.78rem;font-weight:800}
-.status-list{display:grid;gap:4px}
-.status-btn{width:100%;min-height:39px;display:flex;align-items:center;justify-content:space-between;padding:8px 9px;border:1px solid transparent;border-radius:6px;background:transparent;color:#43576c;font-size:.84rem;font-weight:650;text-align:left;cursor:pointer}
-.status-btn:hover{background:#f4f7fa}
-.status-btn.on{border-color:var(--selected-border);background:var(--blue-soft);color:var(--navy)}
-.status-name{display:flex;align-items:center;gap:8px}
-.status-name:before{content:"";width:7px;height:7px;border-radius:50%;background:#93a0ad}
-.status-btn[data-status="완료"] .status-name:before{background:var(--tu-mint)}
-.status-btn[data-status="진행중"] .status-name:before{background:#d49225}
-.status-btn[data-status="장기검토"] .status-name:before{background:#8467ad}
-.status-count{min-width:25px;color:#718195;font-size:.76rem;text-align:right}
 .filter-select{width:100%;height:44px;padding:0 34px 0 10px;border:1px solid #cbd5df;border-radius:6px;outline:0;appearance:none;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23536579' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 10px center;color:#2c4054;font-size:.83rem}
 .filter-select:focus{border-color:var(--focus);box-shadow:0 0 0 3px var(--focus-ring)}
 .filter-stack{display:grid;gap:10px}
@@ -169,8 +159,6 @@ button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visi
 .workspace{display:block;margin-top:6px}
 .filter-panel{display:none;position:static;margin:0 0 14px;padding:15px;border-radius:6px}
 .filter-panel.open{display:block}
-.status-list{grid-template-columns:repeat(2,minmax(0,1fr))}
-.status-btn{min-height:38px}
 .privacy{display:none}
 .result-head{min-height:42px}
 .active-filter.show{display:block}
