@@ -21,7 +21,20 @@ const pct = (n: number, t: number) => (t ? (n / t) * 100 : 0);
 
 const state = { search: '', status: ALL, community: ALL, type: ALL, category: ALL, limit: SITE.pageSize };
 let D: Voc[] = [];
-let counts: Record<string, number> = {};
+let updatedAt = '';
+
+const communityItems = () => state.community === ALL
+  ? D
+  : D.filter((x) => val(x.community) === state.community);
+
+function statusCounts(items: Voc[]) {
+  const result: Record<string, number> = {};
+  items.forEach((x) => {
+    const status = val(x.status);
+    result[status] = (result[status] ?? 0) + 1;
+  });
+  return result;
+}
 
 function applyText() {
   $('utilityText').textContent = SITE.utility;
@@ -45,15 +58,17 @@ function loadBrand() {
   });
 }
 
-function summary(updated: string) {
-  const total = D.length, done = counts['완료'] ?? 0, act = counts['진행중'] ?? 0, long = counts['장기검토'] ?? 0;
+function summary(items: Voc[], updated: string) {
+  const counts = statusCounts(items);
+  const total = items.length, done = counts['완료'] ?? 0, act = counts['진행중'] ?? 0, long = counts['장기검토'] ?? 0;
   const withStatus = done + act + long;
   const n = (v: number) => `${v}<small>건</small>`;
   $('updated').textContent = $('footerUpdated').textContent = dateText(updated);
   $('totalMetric').innerHTML = n(total);
   $('completeMetric').innerHTML = n(done);
   $('activeMetric').innerHTML = n(act + long);
-  $('rateBase').textContent = `상태 입력 ${withStatus}건 기준`;
+  const scope = state.community === ALL ? '' : `${state.community} · `;
+  $('rateBase').textContent = `${scope}상태 입력 ${withStatus}건 기준`;
   $('completeRate').textContent = `완료율 ${pct(done, withStatus).toFixed(1)}%`;
   $('progressTrack').innerHTML =
     `<i class="progress-complete" style="width:${pct(done, withStatus)}%"></i>` +
@@ -68,9 +83,11 @@ function fillSelect(id: 'community' | 'type' | 'category') {
 }
 
 function statusButtons() {
+  const items = communityItems();
+  const counts = statusCounts(items);
   const labels = [ALL, ...STATUS_ORDER.filter((s) => (counts[s] ?? 0) > 0)];
   $('statusList').innerHTML = labels
-    .map((s) => `<button type="button" class="status-btn${state.status === s ? ' on' : ''}" data-status="${s}" aria-pressed="${state.status === s}"><span class="status-name">${s}</span><span class="status-count">${s === ALL ? D.length : counts[s]}</span></button>`)
+    .map((s) => `<button type="button" class="status-btn${state.status === s ? ' on' : ''}" data-status="${s}" aria-pressed="${state.status === s}"><span class="status-name">${s}</span><span class="status-count">${s === ALL ? items.length : counts[s]}</span></button>`)
     .join('');
 }
 
@@ -106,6 +123,10 @@ function filtered() {
 }
 
 function render() {
+  const scopedItems = communityItems();
+  const availableStatuses = statusCounts(scopedItems);
+  if (state.status !== ALL && !(state.status in availableStatuses)) state.status = ALL;
+  summary(scopedItems, updatedAt);
   const out = filtered(), visible = out.slice(0, state.limit), left = out.length - visible.length;
   $('resultCount').textContent = `${out.length}건`;
   $('results').innerHTML = visible.length
@@ -166,9 +187,7 @@ async function init() {
     if (!res.ok) throw new Error(String(res.status));
     const data: Data = await res.json();
     D = data.items;
-    counts = {};
-    D.forEach((x) => { const s = val(x.status); counts[s] = (counts[s] ?? 0) + 1; });
-    summary(data.updated);
+    updatedAt = data.updated;
     (['community', 'type', 'category'] as const).forEach(fillSelect);
     render();
   } catch (err) {
